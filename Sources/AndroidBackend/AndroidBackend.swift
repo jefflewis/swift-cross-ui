@@ -1,4 +1,6 @@
 import Android
+import AndroidView
+import AndroidWidget
 import Foundation
 import SwiftCrossUI
 import AndroidKit
@@ -288,7 +290,9 @@ public final class AndroidBackend: AppBackend {
         widget.setLayoutParams(layoutParams)
     }
     public func createScrollContainer(for child: Widget) -> Widget {
-        child
+        let scrollView = AndroidWidget.ScrollView(javaThis: Self.activity.javaThis, environment: Self.env.env)
+        scrollView.as(AndroidView.ViewGroup.self)!.addView(child)
+        return scrollView.as(AndroidKit.View.self)!
     }
 
     public func updateScrollContainer(
@@ -298,25 +302,28 @@ public final class AndroidBackend: AppBackend {
         bounceVertically: Bool,
         hasHorizontalScrollBar: Bool,
         hasVerticalScrollBar: Bool
-    ) {}
+    ) {
+        scrollView.setHorizontalScrollBarEnabled(hasHorizontalScrollBar)
+        scrollView.setVerticalScrollBarEnabled(hasVerticalScrollBar)
+    }
     public func createTooltipContainer(wrapping child: Widget) -> Widget {
         child
     }
 
-    public func updateTooltipContainer(_ widget: Widget, tooltip: String) {}
+    public func updateTooltipContainer(_ widget: Widget, tooltip: String) {
+        widget.setTooltipText(charSequence(from: tooltip))
+    }
 
     public func createColorableRectangle() -> Widget {
-        RelativeLayout(Self.activity, environment: Self.env.env)
-            .as(AndroidKit.View.self)!
+        AndroidKit.View(Self.activity, environment: Self.env.env)
     }
 
     public func setColor(ofColorableRectangle widget: Widget, to color: SwiftCrossUI.Color.Resolved) {
-        let component: (Float) -> Int32 = { Int32(($0 * 255).rounded()) }
-        let argb = (component(color.opacity) << 24)
-            | (component(color.red) << 16)
-            | (component(color.green) << 8)
-            | component(color.blue)
-        widget.setBackgroundColor(argb)
+        let alpha = UInt32(color.opacity * 255 + 0.5)
+        let red = UInt32(color.red * 255 + 0.5)
+        let green = UInt32(color.green * 255 + 0.5)
+        let blue = UInt32(color.blue * 255 + 0.5)
+        widget.setBackgroundColor(Int32(bitPattern: (alpha << 24) | (red << 16) | (green << 8) | blue))
     }
 
     public func createButton() -> Widget {
