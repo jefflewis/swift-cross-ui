@@ -1,5 +1,4 @@
 import Android
-import AndroidWidget
 import Foundation
 import SwiftCrossUI
 import AndroidKit
@@ -289,9 +288,7 @@ public final class AndroidBackend: AppBackend {
         widget.setLayoutParams(layoutParams)
     }
     public func createScrollContainer(for child: Widget) -> Widget {
-        let scrollView = ScrollView(Self.activity, environment: Self.env.env)
-        scrollView.addView(child)
-        return scrollView.as(AndroidKit.View.self)!
+        child
     }
 
     public func updateScrollContainer(
@@ -301,11 +298,7 @@ public final class AndroidBackend: AppBackend {
         bounceVertically: Bool,
         hasHorizontalScrollBar: Bool,
         hasVerticalScrollBar: Bool
-    ) {
-        let scrollView = scrollView.as(ScrollView.self)!
-        scrollView.setHorizontalScrollBarEnabled(hasHorizontalScrollBar)
-        scrollView.setVerticalScrollBarEnabled(hasVerticalScrollBar)
-    }
+    ) {}
     public func createTooltipContainer(wrapping child: Widget) -> Widget {
         child
     }
