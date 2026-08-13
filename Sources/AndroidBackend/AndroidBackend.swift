@@ -62,7 +62,7 @@ public final class AndroidBackend: AppBackend {
     public let menuImplementationStyle = MenuImplementationStyle.menuButton
     public let canRevealFiles = false
     public let supportsMultipleWindows = false
-    public let supportedPickerStyles: [BackendPickerStyle] = []
+    public let supportedPickerStyles: [BackendPickerStyle] = [.menu]
     public let canOverrideWindowColorScheme = false
     public nonisolated let supportedDatePickerStyles: [DatePickerStyle] = [.automatic]
 
