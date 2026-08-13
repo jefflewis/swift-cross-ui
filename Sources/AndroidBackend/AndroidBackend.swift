@@ -1,7 +1,8 @@
 import Android
 import Foundation
 import SwiftCrossUI
-
+import AndroidKit
+import AndroidBackendShim
 func log(_ message: String) {
     android_log(Int32(ANDROID_LOG_DEBUG.rawValue), "swift", message)
 }
