@@ -35,7 +35,10 @@ class CustomContainer(
     }
 
     override protected fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        setMeasuredDimension(layoutParams.width, layoutParams.height)
+        setMeasuredDimension(
+            MeasureSpec.getSize(widthMeasureSpec),
+            MeasureSpec.getSize(heightMeasureSpec)
+        )
 
         for (i in 0..<childCount) {
             val child = getChildAt(i)
