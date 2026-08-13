@@ -287,6 +287,11 @@ public final class AndroidBackend: AppBackend {
         layoutParams.height = Int32(size.y)
         widget.setLayoutParams(layoutParams)
     }
+    public func createTooltipContainer(wrapping child: Widget) -> Widget {
+        child
+    }
+
+    public func updateTooltipContainer(_ widget: Widget, tooltip: String) {}
 
     public func createColorableRectangle() -> Widget {
         RelativeLayout(Self.activity, environment: Self.env.env)
