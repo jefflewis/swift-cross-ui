@@ -291,7 +291,7 @@ public final class AndroidBackend: AppBackend {
     }
     public func createScrollContainer(for child: Widget) -> Widget {
         let scrollView = AndroidWidget.ScrollView(javaThis: Self.activity.javaThis, environment: Self.env.env)
-        scrollView.as(AndroidView.ViewGroup.self)!.addView(child)
+        AndroidView.ViewGroup(javaThis: scrollView.javaThis, environment: Self.env.env).addView(child)
         return scrollView.as(AndroidKit.View.self)!
     }
 
