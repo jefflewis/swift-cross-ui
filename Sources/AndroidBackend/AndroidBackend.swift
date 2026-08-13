@@ -241,18 +241,16 @@ public final class AndroidBackend: AppBackend {
     public func show(widget: Widget) {}
 
     public func createContainer() -> Widget {
-        RelativeLayout(Self.activity, environment: Self.env.env)
+        CustomContainer(Self.activity, environment: Self.env.env)
             .as(AndroidKit.View.self)!
     }
 
     public func removeAllChildren(of container: Widget) {
-        let container = container.as(ViewGroup.self)!
-        container.removeAllViews()
+        container.as(CustomContainer.self)!.removeAllViews()
     }
 
     public func insert(_ child: Widget, into container: Widget, at index: Int) {
-        let container = container.as(ViewGroup.self)!
-        container.addView(child, Int32(index))
+        container.as(CustomContainer.self)!.addView(child, Int32(index))
     }
 
     public func setPosition(
@@ -260,23 +258,19 @@ public final class AndroidBackend: AppBackend {
         in container: Widget,
         to position: SIMD2<Int>
     ) {
-        let container = container.as(ViewGroup.self)!
-        let child = container.getChildAt(Int32(index))!
-
-        let layoutParams = child.getLayoutParams().as(RelativeLayout.LayoutParams.self)!
-        layoutParams.leftMargin = Int32(position.x)
-        layoutParams.topMargin = Int32(position.y)
-
+        let child = container.as(CustomContainer.self)!.getChildAt(Int32(index))!
+        let layoutParams = child.getLayoutParams().as(CustomContainer.LayoutParams.self)!
+        layoutParams.setX(Int32(position.x))
+        layoutParams.setY(Int32(position.y))
         child.setLayoutParams(layoutParams.as(ViewGroup.LayoutParams.self))
     }
 
     public func remove(childAt index: Int, from container: Widget) {
-        let container = container.as(RelativeLayout.self)!
-        container.removeViewAt(Int32(index))
+        container.as(CustomContainer.self)!.removeViewAt(Int32(index))
     }
 
     public func swap(childAt firstIndex: Int, withChildAt secondIndex: Int, in container: Widget) {
-        let container = container.as(ViewGroup.self)!
+        let container = container.as(CustomContainer.self)!
         let largerIndex = Int32(max(firstIndex, secondIndex))
         let smallerIndex = Int32(min(firstIndex, secondIndex))
         let view1 = container.getChildAt(smallerIndex)
