@@ -1,8 +1,6 @@
 import Android
-import AndroidGraphics
 import Foundation
 import SwiftCrossUI
-import AndroidKit
 
 func log(_ message: String) {
     android_log(Int32(ANDROID_LOG_DEBUG.rawValue), "swift", message)
@@ -294,7 +292,7 @@ public final class AndroidBackend: AppBackend {
             .as(AndroidKit.View.self)!
     }
 
-    public func setColor(ofColorableRectangle widget: Widget, to color: Color.Resolved) {
+    public func setColor(ofColorableRectangle widget: Widget, to color: SwiftCrossUI.Color.Resolved) {
         let component: (Float) -> Int32 = { Int32(($0 * 255).rounded()) }
         let argb = (component(color.opacity) << 24)
             | (component(color.red) << 16)
