@@ -20,8 +20,16 @@ public func entrypoint(_ env: UnsafeMutablePointer<JNIEnv?>, _ object: jobject) 
 
     let holder = JavaObjectHolder(object: object, environment: env.env)
     AndroidBackend.activity = Activity(javaHolder: holder)
-
     main()
+}
+
+@JavaClass("dev.swiftcrossui.androidbackend.RangehandScrollView")
+class RangehandScrollView: AndroidWidget.ScrollView {
+    @JavaMethod
+    @_nonoverride convenience init(
+        _ context: AndroidContent.Context?,
+        environment: JNIEnvironment? = nil
+    )
 }
 
 extension App {
@@ -290,7 +298,7 @@ public final class AndroidBackend: AppBackend {
         widget.setLayoutParams(layoutParams)
     }
     public func createScrollContainer(for child: Widget) -> Widget {
-        let scrollView = AndroidWidget.ScrollView(javaThis: Self.activity.javaThis, environment: Self.env.env)
+        let scrollView = RangehandScrollView(Self.activity, environment: Self.env.env)
         AndroidView.ViewGroup(javaThis: scrollView.javaThis, environment: Self.env.env).addView(child)
         return scrollView.as(AndroidKit.View.self)!
     }
