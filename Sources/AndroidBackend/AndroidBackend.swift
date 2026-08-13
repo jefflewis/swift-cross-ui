@@ -12,6 +12,12 @@ func log(_ message: String) {
 /// A valid AndroidBackend shim must call this to begin execution of the app.
 /// Once initial setup and rendering is done, this function returns control
 /// back to the JVM (by returning).
+
+@_silgen_name("main")
+private func applicationMain(
+    _ argc: Int32,
+    _ argv: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?
+) -> Int32
 @MainActor
 @_cdecl("AndroidBackend_entrypoint")
 public func entrypoint(_ env: UnsafeMutablePointer<JNIEnv?>, _ object: jobject) {
@@ -20,7 +26,10 @@ public func entrypoint(_ env: UnsafeMutablePointer<JNIEnv?>, _ object: jobject) 
 
     let holder = JavaObjectHolder(object: object, environment: env.env)
     AndroidBackend.activity = Activity(javaHolder: holder)
-    main()
+
+    let argv = UnsafeMutableBufferPointer<UnsafeMutablePointer<CChar>?>.allocate(capacity: 1)
+    argv[0] = nil
+    _ = applicationMain(0, argv.baseAddress)
 }
 
 @JavaClass("dev.swiftcrossui.androidbackend.RangehandScrollView")
